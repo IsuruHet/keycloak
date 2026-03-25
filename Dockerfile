@@ -9,4 +9,4 @@ ENV KC_BOOTSTRAP_ADMIN_PASSWORD=admin
 EXPOSE 8080
 
 # Run Keycloak in development mode
-ENTRYPOINT ["kc.sh", "start-dev"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
