@@ -1,19 +1,26 @@
-# Use Keycloak image as base
+FROM quay.io/keycloak/keycloak:26.5.6 AS builder
+
+ENV KC_DB=dev-file
+ENV KC_HTTP_ENABLED=true
+ENV KC_HOSTNAME_STRICT=false
+
+# Pre-build Keycloak to avoid runtime augmentation
+RUN /opt/keycloak/bin/kc.sh build
+
 FROM quay.io/keycloak/keycloak:26.5.6
 
-# Set environment variables for admin credentials
+COPY --from=builder /opt/keycloak/ /opt/keycloak/
+
 ENV KC_BOOTSTRAP_ADMIN_USERNAME=admin
 ENV KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-
-# Explicitly bind to 0.0.0.0 and use Render's PORT env var (defaults to 8080)
 ENV KC_HTTP_HOST=0.0.0.0
 ENV KC_HTTP_PORT=8080
-ENV KC_HOSTNAME_STRICT=false
-ENV KC_HOSTNAME_STRICT_HTTPS=false
 ENV KC_HTTP_ENABLED=true
+ENV KC_HOSTNAME_STRICT=false
+ENV KC_PROXY=edge
+ENV KC_DB=dev-file
 
-# Expose port 8080
 EXPOSE 8080
 
-# Run Keycloak in development mode
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
+# Use start instead of start-dev since we pre-built
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
