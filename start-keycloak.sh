@@ -19,5 +19,3 @@ exec /opt/keycloak/bin/kc.sh start \
   --hostname="$HOSTNAME" \
   --hostname-strict=false \
   --http-enabled=true \
-  --https-key-store-file="" \
-  --https-key-store-password=""
