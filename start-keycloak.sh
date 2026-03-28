@@ -1,9 +1,13 @@
-#!/bin/bash
-
-# Use Render's PORT or default 8080
-PORT=${PORT:-10000}
-
-echo "Starting Keycloak on port $PORT"
-
-# Start Keycloak in dev mode
-/opt/keycloak/bin/kc.sh start --http-host 0.0.0.0 --http-port "$PORT"
+# Production start with:
+# - host/port binding
+# - hostname
+# - hostname-strict=false to allow Render proxy
+# - http enabled (HTTPS handled by Render)
+exec /opt/keycloak/bin/kc.sh start \
+  --http-port="$PORT" \
+  --http-host=0.0.0.0 \
+  --hostname="$HOSTNAME" \
+  --hostname-strict=false \
+  --http-enabled=true \
+  --https-key-store-file="" \
+  --https-key-store-password=""
