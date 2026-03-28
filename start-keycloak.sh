@@ -19,3 +19,4 @@ exec /opt/keycloak/bin/kc.sh start \
   --hostname="$HOSTNAME" \
   --hostname-strict=false \
   --http-enabled=true \
+  --proxy-headers=xforwarded
